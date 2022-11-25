@@ -14,22 +14,23 @@ class MarvelService {
 
 	getAllCharacters = async() => {
 		const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=210&${this._apiKey}`);
-		return res.data.results.map(this._transfromCharacter);
+		return res.data.results.map(this._transformCharacter);
 	}
 
 	getCharacter = async (id) => {
 		const res = await this.getResource(`${this._apiBase}characters/${id}?${this._apiKey}`);
-		console.log(res.data.results[0].description);
 		return this._transformCharacter(res.data.results[0]);
 	}
 
 	_transformCharacter = (res) => {
 		return {
+				id: res.id,
 				name: res.name,
-				description: res.description ? res.description.slice(0,20) + '...' : 'I try to remember fronted',
+				description: res.description ? res.description.slice(0,200) + '...' : 'I try to remember fronted',
 				thumbnail: res.thumbnail.path + '.' + res.thumbnail.extension,
 				homepage: res.urls[0].url,
 				wiki: res.urls[1].url,
+				comics: res.comics.items,
 		}
 	}
 }
